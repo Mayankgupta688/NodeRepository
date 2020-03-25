@@ -1,12 +1,26 @@
-const fs = require("fs")
+console.time("execution")
 
-var outputFileData = fs.readFile("helloWorld.txt",(err, data) =>{
-    console.log(data.toString())
+var fs = require("fs");
+var event = require("events")
+var eventEmitter = new event.EventEmitter();
+
+if(fs.existsSync("MyFiles")) {
+    console.log("Folder already exists");
+    if(fs.existsSync("MyFiles/MyFile.txt")) {
+        fs.unlinkSync("MyFiles/MyFile.txt")
+    }
+    fs.rmdirSync("MyFiles")
+}
+
+
+fs.mkdir("MyFiles", (err) => {
+    eventEmitter.emit("FolderCreated")
 });
 
-console.log("Line 1")
-
-var outputFileDataOther = fs.readFile("helloWorldOther.txt", (err, data) =>{
-    console.log(data.toString());
+eventEmitter.on("FolderCreated", () => {
+    console.log("Folder Created...")
 })
-console.log("Line 2")
+
+console.log("Execution Finished...");
+
+console.timeEnd("execution")
