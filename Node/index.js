@@ -1,26 +1,11 @@
-console.time("execution")
+var express = require("express"); 
+var app = express();
+app.use(express.static('public'));
 
-var fs = require("fs");
-var event = require("events")
-var eventEmitter = new event.EventEmitter();
+var initializeOtherRouting = require("./routingDetails/otherRouting");
+var initializeApiRoutes = require("./routingDetails/apiRouting");
 
-if(fs.existsSync("MyFiles")) {
-    console.log("Folder already exists");
-    if(fs.existsSync("MyFiles/MyFile.txt")) {
-        fs.unlinkSync("MyFiles/MyFile.txt")
-    }
-    fs.rmdirSync("MyFiles")
-}
+initializeOtherRouting(app);
+initializeApiRoutes(app);
 
-
-fs.mkdir("MyFiles", (err) => {
-    eventEmitter.emit("FolderCreated")
-});
-
-eventEmitter.on("FolderCreated", () => {
-    console.log("Folder Created...")
-})
-
-console.log("Execution Finished...");
-
-console.timeEnd("execution")
+app.listen("8000")

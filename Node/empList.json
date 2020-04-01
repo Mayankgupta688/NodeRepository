@@ -1,0 +1,12 @@
+{
+    "empList" : [{
+        "name": "MAyank",
+        "age": 10
+    }, {
+        "name": "Rithika",
+        "age": 10
+    }, {
+        "name": "Anshul",
+        "age": 10
+    }]
+}
