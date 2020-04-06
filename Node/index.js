@@ -1,11 +1,34 @@
-var express = require("express"); 
+var express = require("express");
 var app = express();
-app.use(express.static('public'));
+var path = require("path");
+var fs = require("fs");
+var bodyParser = require("body-parser");
 
-var initializeOtherRouting = require("./routingDetails/otherRouting");
-var initializeApiRoutes = require("./routingDetails/apiRouting");
+app.use(bodyParser.json());
+app.use(bodyParser.urlencoded({extended: true}));
 
-initializeOtherRouting(app);
-initializeApiRoutes(app);
+app.use("/static", express.static(path.join(__dirname, "public")));
 
-app.listen("8000")
+var middlewareFunction = (req, res, next) => {
+
+    return next();
+}
+
+app.get("/", (req, res) => {
+    res.send("Hello All")
+})
+
+
+app.get("/page", middlewareFunction, (req, res) => {
+    fs.readFile("./template/index.html", (err, data) => {
+        res.send(data.toString());
+    })
+})
+
+app.post("/postform", (req, res) => {
+    console.log(req.body.fname)
+    res.write("Submitted for the User: " + req.body.userName);
+    res.end();
+})
+
+app.listen(8000)
